@@ -1,24 +1,24 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import colors from '../../assets/colors';
 
-interface InsertUserViewProps {
+interface InsertRepoViewProps {
     route: {
         params: {
-            username: string;
-            setUsername: any;
+            repo: string;
+            setRepo: any;
         };
     };
 }
 
-export const InsertUserView: React.FC<InsertUserViewProps> = (props) => {
-    const { username, setUsername } = props.route.params;
+export const InsertRepoView: React.FC<InsertRepoViewProps> = (props) => {
+    const { repo, setRepo } = props.route.params;
     const navigation = useNavigation();
-    const [text, setText] = useState<string>(username);
+    const [text, setText] = useState<string>(repo);
 
     const done = (text: string) => {
-        setUsername(text);
+        setRepo(text);
         navigation.goBack();
     };
 
@@ -28,14 +28,19 @@ export const InsertUserView: React.FC<InsertUserViewProps> = (props) => {
                 <TextInput
                     keyboardAppearance={'light'}
                     style={styles.textInput}
-                    placeholder={'Type your github username'}
+                    placeholder={'Type your repository name'}
                     allowFontScaling={false}
                     value={text}
                     placeholderTextColor={colors.GREY}
                     onChangeText={(text: string) => setText(text)}
                 />
                 <View style={styles.bottomView}>
-                    <TouchableOpacity onPress={() => done(text)} style={styles.checkButton}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            done(text);
+                        }}
+                        style={styles.checkButton}
+                    >
                         <Text style={styles.checkButtonLabel}>DONE</Text>
                     </TouchableOpacity>
                 </View>
