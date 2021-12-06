@@ -1,18 +1,12 @@
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import MainStack from './src/navigation/MainStack';
-
-const NavigationTheme = {
-    ...DefaultTheme,
-    colors: {
-        ...DefaultTheme.colors,
-        background: 'white',
-    },
-};
+import { LogBox } from 'react-native';
 
 const App = () => {
+    LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
     return (
-        <NavigationContainer theme={NavigationTheme}>
+        <NavigationContainer>
             <MainStack></MainStack>
         </NavigationContainer>
     );

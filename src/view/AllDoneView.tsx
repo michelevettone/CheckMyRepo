@@ -1,6 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import colors from '../../assets/colors';
+import font from '../../assets/fonts/font';
+import { NavigationActions } from 'react-navigation';
 
 export const AllDoneView: React.FC = () => {
     const navigation = useNavigation();
@@ -15,11 +18,15 @@ export const AllDoneView: React.FC = () => {
                 <View style={styles.bottomView}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.goBack();
+                            navigation.reset({
+                                index: 0,
+                                //@ts-ignore
+                                routes: [{ name: 'MainView' }],
+                            });
                         }}
-                        style={styles.checkButton}
+                        style={styles.button}
                     >
-                        <Text style={styles.checkButtonLabel}>COOL</Text>
+                        <Text style={styles.buttonLabel}>COOL</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -42,7 +49,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     label: {
-        fontWeight: 'bold',
+        fontFamily: font.primary.bold,
+        color: colors.BLACK,
         fontSize: 32,
     },
     bottomView: {
@@ -51,11 +59,12 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
     },
-    checkButton: {
+    button: {
         alignSelf: 'flex-end',
     },
-    checkButtonLabel: {
-        fontWeight: 'bold',
+    buttonLabel: {
+        fontFamily: font.primary.bold,
+        color: colors.BLACK,
         fontSize: 22,
     },
 });

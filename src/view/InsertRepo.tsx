@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { createRef, useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import colors from '../../assets/colors';
+import font from '../../assets/fonts/font';
 
 interface InsertRepoViewProps {
     route: {
@@ -16,6 +17,11 @@ export const InsertRepoView: React.FC<InsertRepoViewProps> = (props) => {
     const { repo, setRepo } = props.route.params;
     const navigation = useNavigation();
     const [text, setText] = useState<string>(repo);
+    const inputRef = createRef<TextInput>();
+
+    useEffect(() => {
+        inputRef.current?.focus()
+    }, [])
 
     const done = (text: string) => {
         setRepo(text);
@@ -26,6 +32,7 @@ export const InsertRepoView: React.FC<InsertRepoViewProps> = (props) => {
         <View style={styles.mainContainer}>
             <View style={styles.innerContainer}>
                 <TextInput
+                    ref={inputRef}
                     keyboardAppearance={'light'}
                     style={styles.textInput}
                     placeholder={'Type your repository name'}
@@ -39,9 +46,9 @@ export const InsertRepoView: React.FC<InsertRepoViewProps> = (props) => {
                         onPress={() => {
                             done(text);
                         }}
-                        style={styles.checkButton}
+                        style={styles.button}
                     >
-                        <Text style={styles.checkButtonLabel}>DONE</Text>
+                        <Text style={styles.buttonLabel}>DONE</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -61,7 +68,8 @@ const styles = StyleSheet.create({
     },
     textInput: {
         borderBottomWidth: 3,
-        fontSize: 24,
+        fontSize: 22,
+        fontFamily: font.primary.regular,
     },
     bottomView: {
         justifyContent: 'center',
@@ -69,11 +77,12 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
     },
-    checkButton: {
+    button: {
         alignSelf: 'flex-end',
     },
-    checkButtonLabel: {
-        fontWeight: 'bold',
+    buttonLabel: {
+        fontFamily: font.primary.bold,
+        color: colors.BLACK,
         fontSize: 22,
     },
 });

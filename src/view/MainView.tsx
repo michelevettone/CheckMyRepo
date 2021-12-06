@@ -4,12 +4,12 @@ import { pushToDoneView, pushToInsertRepo, pushToInsertUser } from '../navigatio
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { checkExistingRepo, sendMessage } from '../functions';
-import { useNetInfo } from '@react-native-community/netinfo';
 import colors from '../../assets/colors';
+import font from '../../assets/fonts/font';
 
 export const MainView: React.FC = () => {
     const navigation: StackNavigationProp<any> = useNavigation();
-    const isConnected = useNetInfo().isConnected;
+    const [connectionStatus, setConnectionStatus] = useState<boolean | undefined>(undefined);
     const [username, setUsername] = useState<string>('');
     const [repo, setRepo] = useState<string>('');
     const [isRepoExisting, setIsRepoExisting] = useState<boolean | undefined>(undefined);
@@ -19,7 +19,7 @@ export const MainView: React.FC = () => {
     }, [username, repo]);
 
     const backgroundColor = useCallback(() => {
-        switch (isRepoExisting) {
+        switch (isRepoExisting && connectionStatus) {
             case undefined:
                 return colors.WHITE;
             case true:
@@ -29,17 +29,28 @@ export const MainView: React.FC = () => {
             default:
                 return colors.WHITE;
         }
-    }, [isRepoExisting]);
+    }, [isRepoExisting, connectionStatus]);
 
     const check = async () => {
-        const existing = await checkExistingRepo(username, repo);
-        setIsRepoExisting(existing);
+        try {
+            const existing = await checkExistingRepo(username, repo);
+            setConnectionStatus(true);
+            setIsRepoExisting(existing);
+        } catch {
+            setConnectionStatus(false);
+            setIsRepoExisting(false);
+        }
     };
 
     const send = async () => {
-        const response = await sendMessage(username, repo);
-        if (response) {
-            pushToDoneView(navigation);
+        try {
+            const response = await sendMessage(username, repo);
+            setConnectionStatus(true);
+            if (response) {
+                pushToDoneView(navigation);
+            }
+        } catch {
+            setConnectionStatus(false);
         }
     };
 
@@ -60,38 +71,38 @@ export const MainView: React.FC = () => {
     }, [isRepoExisting, username, repo]);
 
     const renderErrorLabel = useCallback(() => {
-        if (isRepoExisting && !isConnected) {
+        if (connectionStatus === false) {
             return (
                 <Text style={styles.errorText}>
-                    Check your <Text style={{ fontWeight: 'bold' }}>internet connection</Text>
+                    Check your <Text style={{ fontFamily: font.primary.bold }}>internet connection</Text>
                 </Text>
             );
-        } else if (isRepoExisting === false) {
+        } else if (isRepoExisting === false && connectionStatus) {
             return (
                 <Text style={styles.errorText}>
-                    Check your <Text style={{ fontWeight: 'bold' }}>username</Text> or your <Text style={{ fontWeight: 'bold' }}>repository </Text>name
+                    Check your <Text style={{ fontFamily: font.primary.bold }}>username</Text> or your <Text style={{ fontFamily: font.primary.bold }}>repository </Text>name
                 </Text>
             );
         } else {
             return <></>;
         }
-    }, [isRepoExisting, isConnected]);
+    }, [isRepoExisting, connectionStatus]);
 
     return (
         <View style={[styles.mainContainer, { backgroundColor: backgroundColor() }]}>
             <View style={styles.innerContainer}>
-                <View style={styles.topView}>
+                <View>
                     <Text style={styles.titleLabel}>Set the repository address</Text>
                 </View>
                 <View style={styles.middleView}>
-                    <Text style={{ fontSize: 36 }}>github.com</Text>
+                    <Text style={styles.formLabel}>github.com</Text>
                     <TouchableOpacity onPress={() => pushToInsertUser(navigation, username, setUsername)}>
-                        <Text style={{ fontSize: 36 }}>
+                        <Text style={styles.formLabel} numberOfLines={1}>
                             /<Text style={{ color: colors.GREY }}>{!!username ? username : 'user'}</Text>
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => pushToInsertRepo(navigation, repo, setRepo)}>
-                        <Text style={{ fontSize: 36 }}>
+                        <Text style={styles.formLabel} numberOfLines={1}>
                             /<Text style={{ color: colors.GREY }}>{!!repo ? repo : 'repo'}</Text>
                         </Text>
                     </TouchableOpacity>
@@ -113,14 +124,19 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         marginHorizontal: 40,
     },
-    topView: {},
     titleLabel: {
-        fontWeight: 'bold',
+        fontFamily: font.primary.regular,
         fontSize: 22,
+        color: colors.BLACK,
     },
     middleView: {
         width: '100%',
         marginTop: 40,
+    },
+    formLabel: {
+        fontFamily: font.primary.regular,
+        fontSize: 36,
+        color: colors.BLACK,
     },
     bottomView: {
         justifyContent: 'center',
@@ -132,11 +148,14 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     checkButtonLabel: {
-        fontWeight: 'bold',
+        fontFamily: font.primary.bold,
         fontSize: 22,
+        color: colors.BLACK,
     },
     errorText: {
+        fontFamily: font.primary.regular,
         fontSize: 24,
         marginTop: 16,
+        color: colors.BLACK,
     },
 });

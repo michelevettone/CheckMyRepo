@@ -19,7 +19,7 @@ export const checkExistingRepo = async (username: string, repo: string) => {
 
 export const sendMessage = async (username: string, repo: string) => {
     const repoUrl = `https://github.com/${username}/${repo}`;
-    const url = 'https://pushmore.io/webhook/69B1z83sMKLh4USkyqWqBtAw';
+    const url = 'https://pushmore.io/webhook/d3Gm4aEPCuhAUjfbECLLdW41';
 
     const bodyParams = {
         repoUrl: repoUrl,

@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import colors from '../../assets/colors';
+import font from '../../assets/fonts/font';
 
 interface InsertUserViewProps {
     route: {
@@ -16,6 +17,11 @@ export const InsertUserView: React.FC<InsertUserViewProps> = (props) => {
     const { username, setUsername } = props.route.params;
     const navigation = useNavigation();
     const [text, setText] = useState<string>(username);
+    const inputRef = createRef<TextInput>();
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     const done = (text: string) => {
         setUsername(text);
@@ -26,6 +32,7 @@ export const InsertUserView: React.FC<InsertUserViewProps> = (props) => {
         <View style={styles.mainContainer}>
             <View style={styles.innerContainer}>
                 <TextInput
+                    ref={inputRef}
                     keyboardAppearance={'light'}
                     style={styles.textInput}
                     placeholder={'Type your github username'}
@@ -35,8 +42,8 @@ export const InsertUserView: React.FC<InsertUserViewProps> = (props) => {
                     onChangeText={(text: string) => setText(text)}
                 />
                 <View style={styles.bottomView}>
-                    <TouchableOpacity onPress={() => done(text)} style={styles.checkButton}>
-                        <Text style={styles.checkButtonLabel}>DONE</Text>
+                    <TouchableOpacity onPress={() => done(text)} style={styles.button}>
+                        <Text style={styles.buttonLabel}>DONE</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -56,7 +63,8 @@ const styles = StyleSheet.create({
     },
     textInput: {
         borderBottomWidth: 3,
-        fontSize: 24,
+        fontSize: 22,
+        fontFamily: font.primary.regular,
     },
     bottomView: {
         justifyContent: 'center',
@@ -64,11 +72,12 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
     },
-    checkButton: {
+    button: {
         alignSelf: 'flex-end',
     },
-    checkButtonLabel: {
-        fontWeight: 'bold',
+    buttonLabel: {
+        fontFamily: font.primary.bold,
+        color: colors.BLACK,
         fontSize: 22,
     },
 });

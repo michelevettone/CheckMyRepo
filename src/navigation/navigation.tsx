@@ -11,3 +11,7 @@ export function pushToInsertRepo(navigation: StackNavigationProp<any>, repo: str
 export function pushToDoneView(navigation: StackNavigationProp<any>) {
     navigation.navigate('AllDoneView');
 }
+
+export function goBackToMainView(navigation: StackNavigationProp<any>, username: string, repo: string) {
+    navigation.navigate('MainView', { username, repo });
+}

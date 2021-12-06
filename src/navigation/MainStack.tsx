@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { MainView } from '../view/MainView';
 import { InsertUserView } from '../view/InsertUser';
 import { InsertRepoView } from '../view/InsertRepo';
@@ -8,6 +8,9 @@ import { AllDoneView } from '../view/AllDoneView';
 import { BACK_ICON } from '../../assets/images/imagesIndex';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import font from '../../assets/fonts/font';
+import colors from '../../assets/colors';
+import { HeaderLeft } from '../components/HeaderLeft';
 
 const MainStackNavigator = createStackNavigator();
 export default function MainStack() {
@@ -19,24 +22,16 @@ export default function MainStack() {
                 name="InsertUserView"
                 component={InsertUserView}
                 options={{
-                    headerTitle: 'USER',
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <Image style={{ marginLeft: 30 }} source={BACK_ICON} />
-                        </TouchableOpacity>
-                    ),
+                    headerTitle: '',
+                    headerLeft: () => <HeaderLeft label="USER"></HeaderLeft>,
                 }}
             />
             <MainStackNavigator.Screen
                 name="InsertRepoView"
                 component={InsertRepoView}
                 options={{
-                    headerTitle: 'REPOSITORY',
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <Image style={{ marginLeft: 30 }} source={BACK_ICON} />
-                        </TouchableOpacity>
-                    ),
+                    headerTitle: '',
+                    headerLeft: () => <HeaderLeft label="REPOSITORY"></HeaderLeft>,
                 }}
             />
             <MainStackNavigator.Screen name="AllDoneView" component={AllDoneView} options={{ headerShown: false }} />
