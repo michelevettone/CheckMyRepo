@@ -39,6 +39,7 @@ export const InsertUserView: React.FC<InsertUserViewProps> = (props) => {
                     allowFontScaling={false}
                     value={text}
                     placeholderTextColor={colors.GREY}
+                    autoCapitalize="none"
                     onChangeText={(text: string) => setText(text)}
                 />
                 <View style={styles.bottomView}>

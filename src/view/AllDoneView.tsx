@@ -3,7 +3,6 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import colors from '../../assets/colors';
 import font from '../../assets/fonts/font';
-import { NavigationActions } from 'react-navigation';
 
 export const AllDoneView: React.FC = () => {
     const navigation = useNavigation();

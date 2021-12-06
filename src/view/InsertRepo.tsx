@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { createRef, useCallback, useEffect, useRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import colors from '../../assets/colors';
 import font from '../../assets/fonts/font';
@@ -39,6 +39,7 @@ export const InsertRepoView: React.FC<InsertRepoViewProps> = (props) => {
                     allowFontScaling={false}
                     value={text}
                     placeholderTextColor={colors.GREY}
+                    autoCapitalize="none"
                     onChangeText={(text: string) => setText(text)}
                 />
                 <View style={styles.bottomView}>
